@@ -5,6 +5,8 @@
     "common-material": "libs/common-material",
     "common-ng": "libs/common-ng",
     "common-ngrx": "libs/common-ngrx",
+    "game-client-ng": "apps/game-client-ng",
+    "game-client-ng-e2e": "apps/game-client-ng-e2e",
     "gh-codespaces": "libs/gh-codespaces",
     "internal-ng": "apps/internal-ng",
     "internal-ng-e2e": "apps/internal-ng-e2e",

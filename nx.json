@@ -46,9 +46,9 @@
       "tags": "type:app"
     },
     "@nrwl/angular:library": {
-      "style": "scss",
       "linter": "eslint",
       "unitTestRunner": "jest",
+      "style": "scss",
       "strict": true,
       "standaloneConfig": true,
       "tags": "type:lib"
