@@ -1,0 +1,32 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "strict": true,
+    "paths": {
+      "@nx-workspace-template/common": ["libs/common/src/index.ts"],
+      "@nx-workspace-template/common-ng": ["libs/common-ng/src/index.ts"],
+      "@nx-workspace-template/common-ngrx": ["libs/common-ngrx/src/index.ts"],
+      "@nx-workspace-template/gh-codespaces": [
+        "libs/gh-codespaces/src/index.ts"
+      ],
+      "@nx-workspace-template/script-loader": [
+        "libs/script-loader/src/index.ts"
+      ]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

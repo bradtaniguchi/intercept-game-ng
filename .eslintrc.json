@@ -1,0 +1,83 @@
+{
+  "root": true,
+  "extends": ["eslint:recommended", "prettier"],
+  "ignorePatterns": ["**/*"],
+  "plugins": ["@nrwl/nx"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "rules": {
+        "@nrwl/nx/enforce-module-boundaries": [
+          "error",
+          {
+            "enforceBuildableLibDependency": true,
+            "allow": [],
+            "depConstraints": [
+              {
+                "sourceTag": "*",
+                "onlyDependOnLibsWithTags": ["*"]
+              }
+            ]
+          }
+        ],
+        "padding-line-between-statements": [
+          "error",
+          {
+            "blankLine": "always",
+            "prev": "*",
+            "next": "return"
+          },
+          {
+            "blankLine": "any",
+            "prev": ["const", "let", "var"],
+            "next": "*"
+          },
+          {
+            "blankLine": "always",
+            "prev": "directive",
+            "next": "*"
+          }
+        ],
+        "capitalized-comments": [
+          "error",
+          "always",
+          {
+            "ignorePattern": "pragma|ignored",
+            "ignoreInlineComments": true
+          }
+        ],
+        "lines-around-comment": [
+          "error",
+          {
+            "beforeBlockComment": true,
+            "allowBlockStart": true,
+            "allowObjectStart": true,
+            "allowArrayStart": true,
+            "allowClassStart": true,
+            "allowBlockEnd": true,
+            "allowObjectEnd": true,
+            "allowArrayEnd": true,
+            "allowClassEnd": true
+          }
+        ],
+        "lines-between-class-members": [
+          "error",
+          "always",
+          {
+            "exceptAfterSingleLine": true
+          }
+        ]
+      }
+    },
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@nrwl/nx/typescript"],
+      "rules": {}
+    },
+    {
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nrwl/nx/javascript"],
+      "rules": {}
+    }
+  ]
+}

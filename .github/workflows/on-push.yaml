@@ -1,0 +1,305 @@
+name: on-push
+on:
+  # run on push
+  push:
+    branches:
+      - '**'
+
+jobs:
+  # Generates matrixes for tasks to perform for different types of tasks.
+  # This needs to be done first, before executing the nested
+  # job types, which then can be batched.
+  gen-matrixes:
+    name: gen matrixes
+    timeout-minutes: 5
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    runs-on: ubuntu-latest
+    outputs:
+      LINT_TASKS: ${{ steps.gen-lint-matrix.outputs.LINT_TASKS }}
+      TEST_TASKS: ${{ steps.gen-test-matrix.outputs.TEST_TASKS }}
+      BUILD_TASKS: ${{ steps.gen-build-matrix.outputs.BUILD_TASKS }}
+      LIGHTHOUSE_TASKS: ${{ steps.gen-lighthouse-matrix.outputs.LIGHTHOUSE_TASKS }}
+      DEPLOY_TASKS: ${{ steps.gen-deploy-matrix.outputs.DEPLOY_TASKS }}
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
+        with:
+          lfs: false
+          fetch-depth: 0
+      - name: setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.10.0'
+          cache: 'npm'
+      - name: cache dependencies
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+      - name: install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci --ignore-scripts
+      - name: gen lint matrix
+        id: gen-lint-matrix
+        run: |
+          LINT_TASKS=$(npx nx workspace-generator gh-affected --target=lint --head=$GITHUB_REF --batch=6)
+          echo "::set-output name=LINT_TASKS::$LINT_TASKS"
+      - name: gen test matrix
+        id: gen-test-matrix
+        run: |
+          TEST_TASKS=$(npx nx workspace-generator gh-affected --target=test --head=$GITHUB_REF --batch=4)
+          echo "::set-output name=TEST_TASKS::$TEST_TASKS"
+      - name: gen build matrix
+        id: gen-build-matrix
+        run: |
+          BUILD_TASKS=$(npx nx workspace-generator gh-affected --target=build --head=$GITHUB_REF)
+          echo "::set-output name=BUILD_TASKS::$BUILD_TASKS"
+      - name: gen lighthouse matrix
+        id: gen-lighthouse-matrix
+        run: |
+          LIGHTHOUSE_TASKS=$(npx nx workspace-generator gh-affected --target=lighthouse --head=$GITHUB_REF)
+          echo "::set-output name=LIGHTHOUSE_TASKS::$LIGHTHOUSE_TASKS"
+      - name: gen deploy matrix
+        id: gen-deploy-matrix
+        run: |
+          DEPLOY_TASKS=$(npx nx workspace-generator gh-affected --target=deploy --head=$GITHUB_REF)
+          echo "::set-output name=DEPLOY_TASKS::$DEPLOY_TASKS"
+
+  # Prints the matrix output, useful for debugging
+  # See the bottom of this file for an example printout.
+  print-matrix:
+    name: print matrix
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    needs:
+      - gen-matrixes
+    steps:
+      - name: print lint matrix
+        run: echo "${{ needs.gen-matrixes.outputs.LINT_TASKS }}"
+      - name: print test matrix
+        run: echo "${{ needs.gen-matrixes.outputs.TEST_TASKS }}"
+      - name: print build matrix
+        run: echo "${{ needs.gen-matrixes.outputs.BUILD_TASKS }}"
+      - name: print lighthouse matrix
+        run: echo "${{ needs.gen-matrixes.outputs.LIGHTHOUSE_TASKS }}"
+
+  # Handle linting tasks for affected projects.
+  lint-affected:
+    name: lint affected
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    if: ${{ needs.gen-matrixes.outputs.LINT_TASKS != '' && needs.gen-matrixes.outputs.LINT_TASKS != '[]' }}
+    needs:
+      - gen-matrixes
+    strategy:
+      matrix:
+        TASKS: ${{ fromJSON(needs.gen-matrixes.outputs.LINT_TASKS) }}
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
+      - name: setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.10.0'
+          cache: 'npm'
+      - name: cache dependencies
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+      - name: install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci --ignore-scripts
+      - name: print task-id
+        run: echo "${{ join(matrix.TASKS, ',') }}"
+      - name: run tasks
+        run: npx nx run-many --target=lint --projects="${{ join(matrix.TASKS, ',') }}"
+
+  # Handle testing tasks for affected projects.
+  test-affected:
+    name: test affected
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    if: ${{ needs.gen-matrixes.outputs.TEST_TASKS != '' && needs.gen-matrixes.outputs.TEST_TASKS != '[]' }}
+    needs:
+      - gen-matrixes
+      - lint-affected
+    strategy:
+      matrix:
+        TASKS: ${{ fromJSON(needs.gen-matrixes.outputs.TEST_TASKS) }}
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
+      - name: setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.10.0'
+          cache: 'npm'
+      - name: cache dependencies
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+      - name: install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci --ignore-scripts
+      - name: print task-id
+        run: echo "${{ join(matrix.TASKS, ',') }}"
+      - name: run tasks
+        run: npx nx run-many --target=test --projects="${{ join(matrix.TASKS, ',') }}"
+
+  # Handle building tasks for affected projects.
+  build-affected:
+    name: build affected
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    if: ${{ needs.gen-matrixes.outputs.BUILD_TASKS != '' && needs.gen-matrixes.outputs.BUILD_TASKS != '[]' }}
+    needs:
+      - gen-matrixes
+      - lint-affected
+      - test-affected
+    strategy:
+      matrix:
+        TASK: ${{ fromJSON(needs.gen-matrixes.outputs.BUILD_TASKS) }}
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.10.0'
+          cache: 'npm'
+      - name: cache dependencies
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+      - name: install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci --ignore-scripts
+      - name: print task-id
+        run: echo "${{ matrix.TASK }}"
+      - name: run tasks
+        run: npx nx build --project="${{ matrix.TASK }}"
+      - name: get build output
+        id: get-build-output
+        run: echo "build_output=$(ls -d ./dist/apps/*/)" >> $GITHUB_ENV
+      - name: print build output
+        # example: ./dist/apps/internal-ng
+        run: echo "${{ env.build_output }}"
+      - name: save artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-${{ matrix.TASK }}-${{ github.sha }}
+          path: ${{ env.build_output }}
+          retention-days: 1
+
+  # Handle building tasks for affected projects.
+  lighthouse-affected:
+    name: lighthouse affected
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    if: ${{ needs.gen-matrixes.outputs.LIGHTHOUSE_TASKS != '' && needs.gen-matrixes.outputs.LIGHTHOUSE_TASKS != '[]' }}
+    needs:
+      - gen-matrixes
+      - lint-affected
+      - test-affected
+      - build-affected
+    strategy:
+      matrix:
+        TASK: ${{ fromJSON(needs.gen-matrixes.outputs.LIGHTHOUSE_TASKS) }}
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.10.0'
+          cache: 'npm'
+      - name: cache dependencies
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+      - name: install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci --ignore-scripts
+      - name: install lhci
+        run: npm install -g @lhci/cli
+      - name: print task-id
+        run: echo "${{ matrix.TASK }}"
+      - name: download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: build-${{ matrix.TASK }}-${{ github.sha }}
+          path: ./dist/apps/${{ matrix.TASK }}
+      - name: print dist
+        run: ls -R ./dist/apps
+      - name: lighthouse-affected
+        run: npx nx run ${{ matrix.TASK }}:lighthouse
+      - name: upload results
+        uses: actions/upload-artifact@v2
+        with:
+          name: lighthouse-${{ matrix.TASK }}-${{ github.sha }}
+          path: ./lighthouseci
+          retention-days: 1
+  # Handle deployment tasks for affected projects,
+  # this is only done when on main
+  deploy-affected:
+    name: deploy affected
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    if: ${{ needs.gen-matrixes.outputs.DEPLOY_TASKS != '' && needs.gen-matrixes.outputs.DEPLOY_TASKS != '[]' && github.ref == 'refs/heads/main' }}
+    needs:
+      - gen-matrixes
+      - lint-affected
+      - test-affected
+      - build-affected
+    strategy:
+      matrix:
+        TASK: ${{ fromJSON(needs.gen-matrixes.outputs.DEPLOY_TASKS) }}
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.10.0'
+          cache: 'npm'
+      - name: cache dependencies
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+      - name: install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci --ignore-scripts
+      - name: print task-id
+        run: echo "${{ matrix.TASK }}"
+      - name: download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: build-${{ matrix.TASK }}-${{ github.sha }}
+          path: ./dist/apps/${{ matrix.TASK }}
+      - name: print dist
+        run: ls -R ./dist/apps
+      - name: run tasks
+        run: |
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          npx nx run ${{ matrix.TASK }}:deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # TODO: add the following:
+  # e2e
