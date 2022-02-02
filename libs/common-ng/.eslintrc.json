@@ -21,7 +21,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "nx-workspace-template",
+            "prefix": "intercept-game",
             "style": "kebab-case"
           }
         ]

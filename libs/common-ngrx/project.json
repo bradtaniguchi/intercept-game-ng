@@ -2,7 +2,7 @@
   "projectType": "library",
   "root": "libs/common-ngrx",
   "sourceRoot": "libs/common-ngrx/src",
-  "prefix": "nx-workspace-template",
+  "prefix": "intercept-game",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",

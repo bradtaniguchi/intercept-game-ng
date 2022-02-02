@@ -47,7 +47,7 @@ BuildConfigModule.forRoot(
 
 ```typescript
 @Component({
-  selector: 'nx-workspace-template-main',
+  selector: 'intercept-game-main',
   templateUrl: './main.component.html',
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -77,8 +77,8 @@ In the following example, this component is used as a top-level form component,
 that prompts if the user is sure they want to leave if they are changes within the form.
 This will prevent them from losing their work by accidentally trying to navigate away.
 
-
 **Example usage:**
+
 #### Component Code
 
 ```typescript
@@ -117,7 +117,7 @@ export class MyFormComponent implements DeactivatableComponent {
 ```typescript
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CanDeactivateGuard } from '@nx-workspace-template/common-ng/can-deactivate.guard';
+import { CanDeactivateGuard } from '@intercept-game/common-ng/can-deactivate.guard';
 import { MyFormComponent } from './my-form-component.component';
 
 @NgModule({
@@ -135,7 +135,6 @@ import { MyFormComponent } from './my-form-component.component';
 export class UserRegRoutingModule {}
 ```
 
-
 ### error-handler
 
 The error handler service can be used to parse generic errors, and handle them
@@ -144,14 +143,12 @@ according to the app's specification
 **note** this service requires changes, as it currently doesn't do anything but provide
 an api layer.
 
-
 ### http-loading
 
-The http-loading service can be used to show a top-level loading spinner if http requests 
+The http-loading service can be used to show a top-level loading spinner if http requests
 are being made.
 
 TODO: examples
-
 
 ### logger
 
@@ -159,20 +156,15 @@ The logger service provides an injectable, customizable logger service.
 
 TODO: examples
 
-
 ### nav
 
 The nav sub-folder holds helper functions to work with the `Router` package.
 
 TODO: examples
 
-
 ### route-loading
 
 The route-loading service is similar to the `http-loading` service, it provides a high level
 service state that can be used to know if a route is loading. It includes some "deactivate" logic, that
-can be useful for situations where the "loading" can be deactivated, such as during "confirm" prompts 
+can be useful for situations where the "loading" can be deactivated, such as during "confirm" prompts
 during deactivate guards.
-
-
-
