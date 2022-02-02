@@ -1,0 +1,34 @@
+{
+  "root": "libs/game",
+  "sourceRoot": "libs/game/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:package",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/game",
+        "tsConfig": "libs/game/tsconfig.lib.json",
+        "packageJson": "libs/game/package.json",
+        "main": "libs/game/src/index.ts",
+        "assets": ["libs/game/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/game/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/game"],
+      "options": {
+        "jestConfig": "libs/game/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["type:lib"]
+}
