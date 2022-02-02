@@ -1,7 +1,7 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgLoggerService } from './ng-logger.service';
-import { CommonLoggerConfig } from '@nx-workspace-template/common';
+import { CommonLoggerConfig } from '@intercept-game/common';
 import { NG_LOGGER_CONFIG } from './ng-logger-config';
 
 @NgModule({

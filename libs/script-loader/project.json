@@ -2,7 +2,7 @@
   "projectType": "library",
   "root": "libs/script-loader",
   "sourceRoot": "libs/script-loader/src",
-  "prefix": "nx-workspace-template",
+  "prefix": "intercept-game",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",

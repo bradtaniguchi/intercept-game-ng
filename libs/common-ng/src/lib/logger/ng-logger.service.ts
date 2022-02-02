@@ -1,5 +1,5 @@
 import { Inject, Injectable, Optional } from '@angular/core';
-import { CommonLogger } from '@nx-workspace-template/common';
+import { CommonLogger } from '@intercept-game/common';
 import { NgLoggerConfig, NG_LOGGER_CONFIG } from './ng-logger-config';
 
 @Injectable({

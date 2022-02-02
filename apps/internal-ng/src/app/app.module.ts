@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { BuildConfigModule } from '@nx-workspace-template/common-ng';
+import { BuildConfigModule } from '@intercept-game/common-ng';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { MainComponent } from './core/main/main.component';

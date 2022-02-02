@@ -2,7 +2,7 @@
   "projectType": "application",
   "root": "apps/internal-ng",
   "sourceRoot": "apps/internal-ng/src",
-  "prefix": "nx-workspace-template",
+  "prefix": "intercept-game",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",

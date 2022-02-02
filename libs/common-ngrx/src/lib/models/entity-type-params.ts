@@ -1,4 +1,4 @@
-import { DocumentWithId } from '@nx-workspace-template/common';
+import { DocumentWithId } from '@intercept-game/common';
 
 /**
  * This type is used to wrap type-params for all entity

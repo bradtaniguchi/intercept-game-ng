@@ -1,5 +1,5 @@
 {
-  "npmScope": "nx-workspace-template",
+  "npmScope": "intercept-game",
   "affected": {
     "defaultBase": "main"
   },
