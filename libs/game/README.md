@@ -1,6 +1,7 @@
 # game
 
-This library was generated with [Nx](https://nx.dev).
+This game library will hold the core testable logic for the game itself, along
+with attributes that define the game and its logic.
 
 ## Running unit tests
 
