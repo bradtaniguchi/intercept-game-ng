@@ -3,17 +3,6 @@
   "sourceRoot": "libs/game/src",
   "projectType": "library",
   "targets": {
-    "build": {
-      "executor": "@nrwl/node:package",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/libs/game",
-        "tsConfig": "libs/game/tsconfig.lib.json",
-        "packageJson": "libs/game/package.json",
-        "main": "libs/game/src/index.ts",
-        "assets": ["libs/game/*.md"]
-      }
-    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
