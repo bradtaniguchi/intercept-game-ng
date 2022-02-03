@@ -10,6 +10,7 @@ export interface BoardLocation {
    * The X location on the board. Where 0 is the "upper-left" corner.
    */
   x: BoardX;
+
   /**
    * The Y location on the board. Where 0 is the "upper-left" corner.
    */
