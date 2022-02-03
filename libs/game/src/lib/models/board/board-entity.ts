@@ -9,12 +9,12 @@ import { BoardLocation, isBoardLocation } from './board-location';
  * Unlike the `BoardLocation` type, this type includes properties can be used to
  * identify this entity.
  */
-export interface BoardEntity extends BoardLocation {
+export interface BoardEntity<Id = BoardEntityId> extends BoardLocation {
   /**
    * The unique id of this BoardEntity. No other entity on the board
    * should ever have the same id.
    */
-  id: BoardEntityId;
+  id: Id;
 
   /**
    * The height of the entity on the board. Unlike locations on the board,
