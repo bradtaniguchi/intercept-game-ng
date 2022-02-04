@@ -40,7 +40,7 @@ export const PLANE_CARD_DISPLAY_TITLES: Record<PlaneCard, string> = {
  * Type-guard that returns if the given value is a plane card.
  */
 export const isPlaneCard = (card: unknown): card is PlaneCard =>
-  PLANE_CARDS.includes(card as PlaneCard);
+  typeof card === 'string' && PLANE_CARDS.includes(card as PlaneCard);
 
 /**
  * Returns an array of random plane-cards based upon the plane's refit card count.

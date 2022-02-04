@@ -29,4 +29,4 @@ export const DEFENSIVE_CARD_DISPLAY_TITLES: Record<DefensiveCard, string> = {
  * Type-guard that returns if the given value is a defensive card.
  */
 export const isDefensiveCard = (card: unknown): card is DefensiveCard =>
-  DEFENSIVE_CARDS.includes(card as DefensiveCard);
+  typeof card === 'string' && DEFENSIVE_CARDS.includes(card as DefensiveCard);

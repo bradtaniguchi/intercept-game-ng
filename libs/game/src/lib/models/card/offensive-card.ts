@@ -42,4 +42,4 @@ export const OFFENSIVE_CARD_DISPLAY_TITLES: Record<OffensiveCard, string> = {
  * Type-guard that returns if the given value is an offensive card.
  */
 export const isOffensiveCard = (card: unknown): card is OffensiveCard =>
-  OFFENSIVE_CARDS.includes(card as OffensiveCard);
+  typeof card === 'string' && OFFENSIVE_CARDS.includes(card as OffensiveCard);
