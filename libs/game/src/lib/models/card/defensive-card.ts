@@ -1,7 +1,7 @@
 /**
  * The list of defensive card types. The names and types carry over from the original game.
  */
-export const DEFENSIVE_CARDS = ['loop', 'barrel-roll'];
+export const DEFENSIVE_CARDS = ['loop', 'barrel-roll'] as const;
 
 /**
  * The type of a defensive card.

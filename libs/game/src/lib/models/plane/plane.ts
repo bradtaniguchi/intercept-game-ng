@@ -3,6 +3,9 @@ import { BoardEntity } from '../board/board-entity';
 import { PlaneSquadron } from './plane-squadron';
 import { isNorthSquadron, isSouthSquadron } from './plane-squadron';
 import { PlaneId } from './plane-id';
+import { NORTH_SQUADRONS } from '.';
+import { BoardY } from '../board/board-y';
+import { BoardX } from '../board/board-x';
 
 /**
  * Represents a "plane" object, which is the primary unit of play in the game.
@@ -33,6 +36,21 @@ export interface Plane extends BoardEntity<PlaneId> {
    */
   downed: PlaneId[];
 }
+
+/**
+ * Factory function that creates a basic test plane.
+ * Useful for populating tests.
+ */
+export const createTestPlane = (plane?: Partial<Plane>): Plane => ({
+  id: PlaneId('test-plane'),
+  x: BoardX(0),
+  y: BoardY(0),
+  height: 'in-flight',
+  player: 'test-player',
+  squadron: 'foo',
+  downed: [],
+  ...plane,
+});
 
 /**
  * If the plane is an ace

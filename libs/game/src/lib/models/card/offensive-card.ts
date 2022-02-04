@@ -8,7 +8,7 @@ export const OFFENSIVE_CARDS = [
   'energy-3',
   'energy-4',
   'energy-5',
-];
+] as const;
 
 /**
  * The type of an offensive card.
