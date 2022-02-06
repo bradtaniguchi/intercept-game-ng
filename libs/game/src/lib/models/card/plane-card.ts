@@ -45,16 +45,15 @@ export const isPlaneCard = (card: unknown): card is PlaneCard =>
 /**
  * Returns an array of random plane-cards based upon the plane's refit card count.
  * This is based upon if the plane is an ace or double ace, or not an ace.
- *
- * TODO: Add sorting
  */
 export const getRandomCards = (plane: Plane) => {
-  const cards: PlaneCard[] = [];
+  const cardHand: PlaneCard[] = [];
+  const cards: PlaneCard[] = [...PLANE_CARDS];
 
   for (let i = 0; i < getRefitCardCount(plane); i++)
-    cards.push(PLANE_CARDS[Math.floor(Math.random() * PLANE_CARDS.length)]);
+    cardHand.push(cards.splice(Math.floor(Math.random() * cards.length), 1)[0]);
 
-  return cards;
+  return cardHand;
 };
 
 // TODO: Add map for svg icons.

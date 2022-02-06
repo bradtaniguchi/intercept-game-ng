@@ -3,7 +3,6 @@ import { BoardEntity } from '../board/board-entity';
 import { PlaneSquadron } from './plane-squadron';
 import { isNorthSquadron, isSouthSquadron } from './plane-squadron';
 import { PlaneId } from './plane-id';
-import { NORTH_SQUADRONS } from '.';
 import { BoardY } from '../board/board-y';
 import { BoardX } from '../board/board-x';
 
