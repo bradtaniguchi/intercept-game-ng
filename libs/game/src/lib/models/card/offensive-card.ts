@@ -43,3 +43,22 @@ export const OFFENSIVE_CARD_DISPLAY_TITLES: Record<OffensiveCard, string> = {
  */
 export const isOffensiveCard = (card: unknown): card is OffensiveCard =>
   typeof card === 'string' && OFFENSIVE_CARDS.includes(card as OffensiveCard);
+
+/**
+ * Returns an array of offensive cards multiplied by their card-count.
+ * This should be included with the defensive cards to create a "deck"
+ * of all the cards the player could possibly be given.
+ *
+ * Returns in order of definition within `OFFENSIVE_CARDS`
+ * @see OFFENSIVE_CARDS
+ * @see OFFENSIVE_CARD_COUNTS
+ */
+export const OFFENSIVE_CARD_DECK = Object.freeze(
+  OFFENSIVE_CARDS.reduce((acc, offensiveCard) => {
+    const count = OFFENSIVE_CARD_COUNTS[offensiveCard];
+    if (!count) return acc;
+    for (let i = 0; i < count; i++) acc.push(offensiveCard);
+
+    return acc;
+  }, [] as OffensiveCard[])
+);
