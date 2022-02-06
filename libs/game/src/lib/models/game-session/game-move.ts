@@ -1,6 +1,7 @@
-import { BoardLocation } from '../board/board-location';
-import { Direction } from '../board/direction';
-import { PlaneId } from '../plane/plane-id';
+import { isGameMoveId } from '.';
+import { BoardLocation, isBoardLocation } from '../board/board-location';
+import { Direction, isDirection } from '../board/direction';
+import { isPlaneId, PlaneId } from '../plane/plane-id';
 import { GameMoveId } from './game-move-id';
 
 /**
@@ -32,3 +33,12 @@ export interface GameMove {
    */
   direction: Direction;
 }
+
+/**
+ * Returns if the the move is a valid move, according to the nested type-checkers
+ */
+export const isGameMove = (move: unknown): move is GameMove =>
+  isGameMoveId((move as GameMove).id) &&
+  isPlaneId((move as GameMove).plane) &&
+  isBoardLocation((move as GameMove).newLocation) &&
+  isDirection((move as GameMove).direction);
