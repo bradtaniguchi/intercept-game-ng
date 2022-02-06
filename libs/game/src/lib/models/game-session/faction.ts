@@ -8,7 +8,7 @@
  * but as this can be dynamic, we will use the cardinal directions to represent
  * the factions within the code.
  */
-export const FACTIONS = ['north', 'south'];
+export const FACTIONS = ['north', 'south'] as const;
 
 /**
  * The type of faction
