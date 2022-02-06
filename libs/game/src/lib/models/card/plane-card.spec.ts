@@ -1,6 +1,30 @@
 import { createTestPlane } from '../plane/plane';
 import { PlaneId } from '../plane/plane-id';
-import { getRandomCards, PlaneCard } from './plane-card';
+import { getRandomCards, PlaneCard, PLANE_CARD_DECK } from './plane-card';
+
+describe('PLANE_CARD_DECK', () => {
+  test('returns cards', () =>
+    expect(PLANE_CARD_DECK).toEqual([
+      'energy-1',
+      'energy-1',
+      'energy-1',
+      'energy-2',
+      'energy-2',
+      'energy-3',
+      'energy-3',
+      'energy-4',
+      'energy-4',
+      'energy-5',
+      'energy-5',
+      'loop',
+      'loop',
+      'barrel-roll',
+      'barrel-roll',
+      'barrel-roll',
+    ]));
+  test('is frozen', () =>
+    expect(() => (PLANE_CARD_DECK as string[]).pop()).toThrow());
+});
 
 describe('getRandomCards', () => {
   let randomSpy: jest.SpyInstance;
@@ -29,20 +53,25 @@ describe('getRandomCards', () => {
     expect(Math.random()).toBe(0.2);
     expect(Math.random()).toBe(0.2);
   });
-  test.skip('returns 4 cards if non-ace plane', () =>
-    // TODO: add sorting, can't return same card
+  test('returns 4 cards if non-ace plane', () =>
+    // TODO: add sorting
     expect(getRandomCards(createTestPlane())).toEqual([
       'energy-4',
       'energy-2',
       'barrel-roll',
       'energy-5',
     ] as PlaneCard[]));
-  test.skip('can not return the same card too many times', () => {
+  test('can not return the same card too many times', () => {
     randomSpy.mockRestore();
     randomSpy = jest.spyOn(global.Math, 'random').mockReturnValue(0);
-    expect(getRandomCards(createTestPlane())).toEqual([]);
+    expect(getRandomCards(createTestPlane())).toEqual([
+      'energy-1',
+      'energy-1',
+      'energy-1',
+      'energy-2',
+    ]);
   });
-  test.skip('returns 6 cards if ace', () =>
+  test('returns 6 cards if ace', () =>
     expect(
       getRandomCards(
         createTestPlane({
@@ -54,9 +83,46 @@ describe('getRandomCards', () => {
       'energy-2',
       'barrel-roll',
       'energy-5',
-      'energy-5',
-      'energy-3',
+      'loop',
+      'energy-2',
     ]));
-  test.todo('returns 8 cards if double ace');
-  test.todo('returns 8 cards if multi-ace');
+  test('returns 8 cards if double ace', () =>
+    expect(
+      getRandomCards(
+        createTestPlane({
+          downed: [PlaneId('test-plane-2'), PlaneId('test-plane-3')],
+        })
+      )
+    ).toEqual([
+      'energy-4',
+      'energy-2',
+      'barrel-roll',
+      'energy-5',
+      'loop',
+      'energy-2',
+      'energy-3',
+      'energy-1',
+    ]));
+  test('still returns 8 cards if multi-ace', () =>
+    expect(
+      getRandomCards(
+        createTestPlane({
+          downed: [
+            PlaneId('test-plane-2'),
+            PlaneId('test-plane-3'),
+            PlaneId('test-plane-4'),
+            PlaneId('test-plane-5'),
+          ],
+        })
+      )
+    ).toEqual([
+      'energy-4',
+      'energy-2',
+      'barrel-roll',
+      'energy-5',
+      'loop',
+      'energy-2',
+      'energy-3',
+      'energy-1',
+    ]));
 });
