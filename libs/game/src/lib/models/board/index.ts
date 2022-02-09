@@ -7,3 +7,4 @@ export * from './board-row';
 export * from './board-x';
 export * from './board-y';
 export * from './direction';
+export * from './near-location';
