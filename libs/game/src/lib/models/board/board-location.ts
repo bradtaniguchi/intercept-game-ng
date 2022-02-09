@@ -23,3 +23,11 @@ export interface BoardLocation {
 export const isBoardLocation = (location: unknown): location is BoardLocation =>
   isBoardX((location as BoardLocation).x) &&
   isBoardY((location as BoardLocation).y);
+
+/**
+ * Returns if the 2 board locations are equal.
+ */
+export const isBoardLocationEq = (
+  { x: aX, y: aY }: BoardLocation,
+  { x: bX, y: bY }: BoardLocation
+) => aX === bX && aY === bY;
