@@ -1,6 +1,7 @@
 import { MAX_BOARD_Y } from './board-y';
-import { BoardRow } from './board-row';
-import { BoardLocation } from '.';
+import { BoardRow, isBoardRow } from './board-row';
+import { BoardLocation } from './board-location';
+import { BoardX, BoardY, MAX_BOARD_X } from '.';
 
 /**
  * The board grid is a 2D representation of the board,
@@ -18,7 +19,10 @@ export type BoardGrid<BoardCell = unknown> = BoardRow<BoardCell>[];
  * Will nest call `isBoardRow`.
  */
 export const isBoardGrid = (grid: unknown): grid is BoardGrid =>
-  !!grid && Array.isArray(grid) && grid.length === MAX_BOARD_Y;
+  !!grid &&
+  Array.isArray(grid) &&
+  grid.length === MAX_BOARD_Y &&
+  grid.every(isBoardRow);
 
 /**
  * Returns the element at the given board-grid. The only difference between this
@@ -28,3 +32,25 @@ export const getFromGrid = <BoardCell = unknown>(
   board: BoardGrid<BoardCell>,
   { x, y }: BoardLocation
 ): BoardCell => board[y][x];
+
+type CreateGrid = {
+  (): BoardGrid<undefined>;
+  <BoardCell>(
+    cellFactory: (location: BoardLocation) => BoardCell
+  ): BoardGrid<BoardCell>;
+};
+
+/**
+ * Factory function that creates a basic grid.
+ * Will be populated by `undefined` if no `cellFactory` is given.
+ */
+export const createGrid: CreateGrid = <BoardCell = undefined>(
+  cellFactory?: (location: BoardLocation) => BoardCell
+) =>
+  new Array(MAX_BOARD_Y)
+    .fill(null)
+    .map((_, y) =>
+      new Array(MAX_BOARD_X)
+        .fill(null)
+        .map((__, x) => cellFactory?.({ x: BoardX(x), y: BoardY(y) }))
+    );
