@@ -1,4 +1,4 @@
-import { isBoardEntityId } from './board-entity-id';
+import { createBoardEntityId, isBoardEntityId } from './board-entity-id';
 
 describe('isBoardEntityId', () => {
   test('returns true if string of length 8', () =>
@@ -9,4 +9,9 @@ describe('isBoardEntityId', () => {
     expect(isBoardEntityId('1234567')).toEqual(false);
     expect(isBoardEntityId('123456789')).toEqual(false);
   });
+});
+
+describe('createBoardEntityId', () => {
+  test('returns valid id', () =>
+    expect(isBoardEntityId(createBoardEntityId())).toEqual(true));
 });
