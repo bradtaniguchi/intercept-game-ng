@@ -1,5 +1,5 @@
-import { isBoardEntityId } from '.';
-import { BoardEntityId } from './board-entity-id';
+import { BoardEntityId, isBoardEntityId } from './board-entity-id';
+import { BoardHeight } from './board-height';
 import { BoardLocation, isBoardLocation } from './board-location';
 
 /**
@@ -9,12 +9,18 @@ import { BoardLocation, isBoardLocation } from './board-location';
  * Unlike the `BoardLocation` type, this type includes properties can be used to
  * identify this entity.
  */
-export interface BoardEntity extends BoardLocation {
+export interface BoardEntity<Id = BoardEntityId> extends BoardLocation {
   /**
    * The unique id of this BoardEntity. No other entity on the board
    * should ever have the same id.
    */
-  id: BoardEntityId;
+  id: Id;
+
+  /**
+   * The height of the entity on the board. Unlike locations on the board,
+   * entities can be placed on the board at different heights, and thus "overlap".
+   */
+  height: BoardHeight;
 }
 
 /**

@@ -10,6 +10,7 @@ export interface BoardLocation {
    * The X location on the board. Where 0 is the "upper-left" corner.
    */
   x: BoardX;
+
   /**
    * The Y location on the board. Where 0 is the "upper-left" corner.
    */
@@ -22,3 +23,11 @@ export interface BoardLocation {
 export const isBoardLocation = (location: unknown): location is BoardLocation =>
   isBoardX((location as BoardLocation).x) &&
   isBoardY((location as BoardLocation).y);
+
+/**
+ * Returns if the 2 board locations are equal.
+ */
+export const isBoardLocationEq = (
+  { x: aX, y: aY }: BoardLocation,
+  { x: bX, y: bY }: BoardLocation
+) => aX === bX && aY === bY;
