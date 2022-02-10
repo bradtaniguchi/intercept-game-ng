@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid';
+
 /**
  * The length of a game-session id.
  */
@@ -18,3 +20,9 @@ export const GameSessionId = (id: string): GameSessionId => id as GameSessionId;
  */
 export const isGameSessionId = (id: unknown): id is GameSessionId =>
   typeof id === 'string' && id.length === GAME_SESSION_ID_LENGTH;
+
+/**
+ * Creates game-session-id
+ */
+export const createGameSessionId = (): GameSessionId =>
+  GameSessionId(nanoid(GAME_SESSION_ID_LENGTH));

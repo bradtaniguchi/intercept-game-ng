@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid';
+
 /**
  * The length of a roll-id
  */
@@ -18,3 +20,8 @@ export const RollId = (id: string): RollId => id as RollId;
  */
 export const isRollId = (id: unknown): id is RollId =>
   typeof id === 'string' && id.length === ROLL_ID_LENGTH;
+
+/**
+ * Creates a new roll-id
+ */
+export const createRollId = (): RollId => RollId(nanoid(ROLL_ID_LENGTH));
