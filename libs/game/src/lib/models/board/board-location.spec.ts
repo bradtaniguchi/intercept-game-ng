@@ -60,3 +60,5 @@ describe('isBoardLocationEq', () => {
       )
     ).toEqual(false));
 });
+
+// TODO: add tests for board-location-str

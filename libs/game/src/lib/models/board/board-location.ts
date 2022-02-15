@@ -31,3 +31,37 @@ export const isBoardLocationEq = (
   { x: aX, y: aY }: BoardLocation,
   { x: bX, y: bY }: BoardLocation
 ) => aX === bX && aY === bY;
+
+/**
+ * A board location string is a combined calculated string of a board-location,
+ * in the format: `x-y`. This should be used internally to quickly perform
+ * lookups in a 1D array.
+ */
+export type BoardLocationStr = string & { readonly brand: unique symbol };
+
+/**
+ * Casts the given string to a board location string
+ */
+export const BoardLocationStr = (str: string): BoardLocationStr =>
+  str as BoardLocationStr;
+
+/**
+ * Returns if the given string is a board-location str
+ */
+export const isBoardLocationStr = (str: unknown): str is BoardLocationStr => {
+  if (typeof str !== 'string') return false;
+  const matches = str.match(/\d+-d+/);
+  if (matches?.length !== 2) return false;
+  const [x, y] = matches;
+  return isBoardX(x) && isBoardY(y);
+};
+
+/**
+ * Returns a board location string from a given board-location object.
+ *
+ * Useful to perform 1D lookups
+ */
+export const getBoardLocationString = ({
+  x,
+  y,
+}: BoardLocation): BoardLocationStr => BoardLocationStr(`${x}-${y}`);
