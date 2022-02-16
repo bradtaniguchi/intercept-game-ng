@@ -50,10 +50,15 @@ export const BoardLocationStr = (str: string): BoardLocationStr =>
  */
 export const isBoardLocationStr = (str: unknown): str is BoardLocationStr => {
   if (typeof str !== 'string') return false;
-  const matches = str.match(/\d+-d+/);
-  if (matches?.length !== 2) return false;
-  const [x, y] = matches;
-  return isBoardX(x) && isBoardY(y);
+  const matches = str.match(/^(\d+)-(\d+)$/);
+  if (!matches || matches.length !== 3) return false;
+  const [, x, y] = matches;
+  if (isNaN(+x) || isNaN(+y)) return false;
+  const isPrefixedWithZeroes = (numStr: string): boolean =>
+    numStr !== '0' && numStr.replace(/\b0+/g, '') !== numStr;
+  if (isPrefixedWithZeroes(x) || isPrefixedWithZeroes(y)) return false;
+
+  return isBoardX(+x) && isBoardY(+y);
 };
 
 /**
