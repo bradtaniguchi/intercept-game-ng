@@ -34,6 +34,12 @@ export interface Plane extends BoardEntity<PlaneId> {
    * These cards are bestowed to the plane when it lands and refits.
    */
   downed: PlaneId[];
+
+  /**
+   * If the current plane has been "shot down".
+   * It shouldn't be selectable or movable at this time.
+   */
+  isDowned: boolean;
 }
 
 /**
@@ -48,6 +54,7 @@ export const createTestPlane = (plane?: Partial<Plane>): Plane => ({
   player: 'test-player',
   squadron: 'foo',
   downed: [],
+  isDowned: false,
   ...plane,
 });
 
