@@ -70,3 +70,23 @@ export const getBoardLocationString = ({
   x,
   y,
 }: BoardLocation): BoardLocationStr => BoardLocationStr(`${x}-${y}`);
+
+/**
+ * Returns a board location from the board location string.
+ *
+ * Will throw an error if the given str is not actually a BoardLocationStr
+ */
+export const getBoardLocationFromString = (
+  str: BoardLocationStr
+): BoardLocation => {
+  if (!isBoardLocationStr(str))
+    throw new Error('Invalid BoardLocationStr given');
+  const matches = str.match(/^(\d+)-(\d+)$/);
+  if (!matches || matches.length !== 3)
+    throw new Error('Invalid BoardLocationStr given');
+  const [, x, y] = matches;
+  return {
+    x: BoardX(+x),
+    y: BoardY(+y),
+  };
+};
