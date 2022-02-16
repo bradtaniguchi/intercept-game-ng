@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid';
+
 /**
  * The length of a board-entity id. This should be unique enough, and
  * easy enough to work with.
@@ -17,4 +19,8 @@ export const BoardEntityId = (id: string): BoardEntityId => id as BoardEntityId;
 export const isBoardEntityId = (id: unknown): id is BoardEntityId =>
   typeof id === 'string' && id.length === BOARD_ENTITY_ID_LENGTH;
 
-// TODO: add "createBoardEntityId" generator function
+/**
+ * Creates a valid board-entity id.
+ */
+export const createBoardEntityId = (): BoardEntityId =>
+  BoardEntityId(nanoid(BOARD_ENTITY_ID_LENGTH));

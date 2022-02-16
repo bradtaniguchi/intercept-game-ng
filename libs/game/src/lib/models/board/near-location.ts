@@ -1,7 +1,6 @@
-import { BoardX } from '.';
 import { BoardGrid, getFromGrid } from './board-grid';
 import { BoardLocation } from './board-location';
-import { isBoardX } from './board-x';
+import { BoardX, isBoardX } from './board-x';
 import { BoardY, isBoardY } from './board-y';
 import { Direction } from './direction';
 
@@ -27,11 +26,11 @@ export const getNearLocations = <BoardCell = unknown>(
   board: BoardGrid<BoardCell>,
   { x, y }: BoardLocation
 ): NearLocations<BoardCell> => ({
-  north: isBoardY(y + 1)
-    ? getFromGrid(board, { x, y: BoardY(y + 1) })
-    : undefined,
-  south: isBoardY(y - 1)
+  north: isBoardY(y - 1)
     ? getFromGrid(board, { x, y: BoardY(y - 1) })
+    : undefined,
+  south: isBoardY(y + 1)
+    ? getFromGrid(board, { x, y: BoardY(y + 1) })
     : undefined,
   east: isBoardX(x + 1)
     ? getFromGrid(board, { x: BoardX(x + 1), y })

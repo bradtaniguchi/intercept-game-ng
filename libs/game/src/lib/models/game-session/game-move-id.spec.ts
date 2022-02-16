@@ -1,4 +1,4 @@
-import { isGameMoveId } from './game-move-id';
+import { createGameMoveId, isGameMoveId } from './game-move-id';
 
 describe('isGameMoveId', () => {
   test('returns true for valid game-move-id', () => {
@@ -8,4 +8,9 @@ describe('isGameMoveId', () => {
     expect(isGameMoveId(12345678)).toEqual(false);
     expect(isGameMoveId('some-string')).toEqual(false);
   });
+});
+
+describe('createGameMoveId', () => {
+  test('returns valid id', () =>
+    expect(isGameMoveId(createGameMoveId())).toEqual(true));
 });
