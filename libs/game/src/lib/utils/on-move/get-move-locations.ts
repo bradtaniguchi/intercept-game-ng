@@ -13,7 +13,11 @@ import { Plane } from '../../models/plane/plane';
  * at the starting location.
  * 3. A plane cannot move through another plane.
  */
-export const getMoveLocations = (params: {
+export const getMoveLocations = ({
+  plane,
+  dice,
+  inFlightPlanes,
+}: {
   /**
    * The plane we are returning moves for.
    */
@@ -23,7 +27,7 @@ export const getMoveLocations = (params: {
    */
   dice: DiceSides;
   /**
-   *
+   * The list of planes currently in flight
    */
   inFlightPlanes: Plane[];
 }): {
