@@ -1,4 +1,5 @@
-import { createGrid } from '../../models/board/board-grid';
+import { BoardX, BoardY } from '../../models/board';
+import { createGrid, updateGrid } from '../../models/board/board-grid';
 import { boardToStr, cellToOChar } from './board-to-str';
 
 describe('boardToStr', () => {
@@ -40,6 +41,32 @@ OOOOOOOOOO
 OOOOOOOOOO
 OOOOOOOOOO
 OOOOOOOOOO`));
-  // TODO: needs the "addToGrid" function
-  test.todo('plane is rendered at X in O grid');
+  test('cell is rendered at X in O grid', () =>
+    expect(
+      boardToStr({
+        board: updateGrid({
+          board: createGrid(),
+          location: {
+            x: BoardX(5),
+            y: BoardY(5),
+          },
+          cell: 'X',
+        }),
+        // keep value, or return O if nothing is given
+        cellToStr: (cell) => cell || 'O',
+        startWithNewLine: true,
+      })
+    ).toEqual(`
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOXOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO`));
 });
