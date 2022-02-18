@@ -1,4 +1,4 @@
-import { createGrid, getFromGrid, isBoardGrid } from './board-grid';
+import { createGrid, getFromGrid, updateGrid, isBoardGrid } from './board-grid';
 import { BoardX } from './board-x';
 import { BoardY } from './board-y';
 
@@ -30,4 +30,53 @@ describe('getFromGrid', () => {
       // provided to verify we are getting the actual value.
       value: 'test',
     }));
+});
+
+describe('updateGrid', () => {
+  test('returns new grid reference', () => {
+    const originalBoardGrid = createGrid();
+
+    const updatedBoardGrid = updateGrid({
+      board: originalBoardGrid,
+      location: {
+        x: BoardX(5),
+        y: BoardY(5),
+      },
+      cell: 'whatever',
+    });
+
+    expect(originalBoardGrid === updatedBoardGrid).toEqual(false);
+  });
+  test('updates grid with new cell', () => {
+    const originalBoardGrid = createGrid();
+
+    const updatedBoardGrid = updateGrid({
+      board: originalBoardGrid,
+      location: {
+        x: BoardX(5),
+        y: BoardY(5),
+      },
+      cell: 'whatever',
+    });
+
+    expect(updatedBoardGrid[5][5]).toEqual('whatever');
+  });
+  test('keeps unaffected row reference', () => {
+    const originalBoardGrid = createGrid();
+
+    const originalBoardRow2 = originalBoardGrid[2];
+
+    const updatedBoardGrid = updateGrid({
+      board: originalBoardGrid,
+      location: {
+        x: BoardX(5),
+        y: BoardY(5),
+      },
+      cell: 'whatever',
+    });
+
+    const updatedBoardRow2 = updatedBoardGrid[2];
+
+    expect(originalBoardRow2 === updatedBoardRow2).toEqual(true);
+  });
 });

@@ -41,6 +41,27 @@ type CreateGrid = {
 };
 
 /**
+ * Updates the grid with the given board-location and cell. Will
+ * return the updated grid, with the new cell.
+ */
+export const updateGrid = <BoardCell = unknown>({
+  board,
+  location: { x, y },
+  cell,
+}: {
+  board: BoardGrid<BoardCell>;
+  location: BoardLocation;
+  cell: BoardCell;
+}): BoardGrid<BoardCell> =>
+  board.map((boardRow, rowIndex) =>
+    rowIndex === y
+      ? boardRow.map((boardCell, cellIndex) =>
+          cellIndex === x ? cell : boardCell
+        )
+      : boardRow
+  );
+
+/**
  * Factory function that creates a basic grid.
  * Will be populated by `undefined` if no `cellFactory` is given.
  */
