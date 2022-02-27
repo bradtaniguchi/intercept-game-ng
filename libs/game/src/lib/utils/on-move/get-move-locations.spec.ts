@@ -1,6 +1,48 @@
+import {
+  BoardLocation,
+  BoardX,
+  BoardY,
+  getBoardLocationString,
+} from '../../models/board';
+import { createTestPlane } from '../../models/plane/plane';
+import { getMoveLocations } from './get-move-locations';
+
 describe('getMoveLocations', () => {
   describe('roll of 1', () => {
-    test.todo('returns 4 moves');
+    test('returns 4 moves', () => {
+      const boardLocations: BoardLocation[] = [
+        {
+          // North
+          x: BoardX(5),
+          y: BoardY(4),
+        },
+        {
+          // South
+          x: BoardX(5),
+          y: BoardY(6),
+        },
+        {
+          // East
+          x: BoardX(6),
+          y: BoardY(5),
+        },
+        {
+          // West
+          x: BoardX(4),
+          y: BoardY(5),
+        },
+      ];
+      expect(
+        getMoveLocations({
+          plane: { ...createTestPlane(), x: BoardX(5), y: BoardY(5) },
+          dice: 1,
+          inFlightPlanes: [],
+        })
+      ).toEqual({
+        boardLocations,
+        boardLocationStrs: boardLocations.map(getBoardLocationString),
+      });
+    });
     test.todo('returns 3 moves, when plane is adjacent');
   });
 

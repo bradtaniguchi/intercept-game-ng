@@ -39,3 +39,17 @@ export const getNearLocations = <BoardCell = unknown>(
     ? getFromGrid(board, { x: BoardX(x - 1), y })
     : undefined,
 });
+
+/**
+ * Returns the board-locations near the given board-location that
+ * are valid.
+ */
+export const getNearLocationCoords = ({
+  x,
+  y,
+}: BoardLocation): Record<Direction, BoardLocation | undefined> => ({
+  north: isBoardY(y - 1) ? { x, y: BoardY(y - 1) } : undefined,
+  south: isBoardY(y + 1) ? { x, y: BoardY(y + 1) } : undefined,
+  east: isBoardX(x + 1) ? { x: BoardX(x + 1), y } : undefined,
+  west: isBoardX(x - 1) ? { x: BoardX(x - 1), y } : undefined,
+});

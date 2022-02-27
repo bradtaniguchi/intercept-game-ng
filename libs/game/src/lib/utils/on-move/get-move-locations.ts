@@ -1,7 +1,9 @@
 import {
   BoardLocation,
   BoardLocationStr,
+  getBoardLocationString,
 } from '../../models/board/board-location';
+import { getNearLocationCoords } from '../../models/board/near-location';
 import { DiceSides } from '../../models/game-session/dice-sides';
 import { Plane } from '../../models/plane/plane';
 
@@ -13,11 +15,7 @@ import { Plane } from '../../models/plane/plane';
  * at the starting location.
  * 3. A plane cannot move through another plane.
  */
-export const getMoveLocations = ({
-  plane,
-  dice,
-  inFlightPlanes,
-}: {
+export const getMoveLocations = (params: {
   /**
    * The plane we are returning moves for.
    */
@@ -42,10 +40,45 @@ export const getMoveLocations = ({
    */
   boardLocationStrs: BoardLocationStr[];
 } => {
-  // TODO:
+  /**
+   *  Internal function used to recursively call with only
+   * the boardLocations return, rather than both boardLocationsStr
+   * and boardLocations.
+   */
+  const getMoveLocations = ({
+    plane,
+    dice,
+    inFlightPlanes,
+  }: {
+    plane: Plane;
+    dice: DiceSides;
+    inFlightPlanes: Plane[];
+  }): BoardLocation[] => {
+    const landingSpots: BoardLocation[] = [];
+    const nextDice = (dice - 1) as DiceSides;
+    const { north, south, east, west } = getNearLocationCoords(plane);
+    if (north) landingSpots.push(north);
+    if (south) landingSpots.push(south);
+    if (east) landingSpots.push(east);
+    if (west) landingSpots.push(west);
+    if (nextDice <= 0) return landingSpots;
+
+    return landingSpots.reduce(
+      (acc, { x, y }) => [
+        ...acc,
+        ...getMoveLocations({
+          plane: { ...plane, x, y },
+          dice: nextDice,
+          inFlightPlanes,
+        }),
+      ],
+      [] as BoardLocation[]
+    );
+  };
+  const boardLocations = getMoveLocations(params);
 
   return {
-    boardLocations: [],
-    boardLocationStrs: [],
+    boardLocations,
+    boardLocationStrs: boardLocations.map(getBoardLocationString),
   };
 };
