@@ -2,6 +2,7 @@ import {
   BoardLocation,
   BoardLocationStr,
   getBoardLocationString,
+  isBoardLocationEq,
 } from '../../models/board/board-location';
 import { getNearLocationCoords } from '../../models/board/near-location';
 import { DiceSides } from '../../models/game-session/dice-sides';
@@ -57,10 +58,34 @@ export const getMoveLocations = (params: {
     const landingSpots: BoardLocation[] = [];
     const nextDice = (dice - 1) as DiceSides;
     const { north, south, east, west } = getNearLocationCoords(plane);
-    if (north) landingSpots.push(north);
-    if (south) landingSpots.push(south);
-    if (east) landingSpots.push(east);
-    if (west) landingSpots.push(west);
+    if (
+      north &&
+      !inFlightPlanes.find((inFlightPlane) =>
+        isBoardLocationEq(north, inFlightPlane)
+      )
+    )
+      landingSpots.push(north);
+    if (
+      south &&
+      !inFlightPlanes.find((inFlightPlane) =>
+        isBoardLocationEq(south, inFlightPlane)
+      )
+    )
+      landingSpots.push(south);
+    if (
+      east &&
+      !inFlightPlanes.find((inFlightPlane) =>
+        isBoardLocationEq(east, inFlightPlane)
+      )
+    )
+      landingSpots.push(east);
+    if (
+      west &&
+      !inFlightPlanes.find((inFlightPlane) =>
+        isBoardLocationEq(west, inFlightPlane)
+      )
+    )
+      landingSpots.push(west);
     if (nextDice <= 0) return landingSpots;
 
     return landingSpots.reduce(
@@ -75,6 +100,7 @@ export const getMoveLocations = (params: {
       [] as BoardLocation[]
     );
   };
+
   const boardLocations = getMoveLocations(params);
 
   return {

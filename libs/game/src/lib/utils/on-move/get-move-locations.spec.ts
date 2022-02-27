@@ -43,7 +43,69 @@ describe('getMoveLocations', () => {
         boardLocationStrs: boardLocations.map(getBoardLocationString),
       });
     });
-    test.todo('returns 3 moves, when plane is adjacent');
+    test('returns 3 moves, when plane is adjacent', () => {
+      const boardLocations: BoardLocation[] = [
+        {
+          // South
+          x: BoardX(5),
+          y: BoardY(6),
+        },
+        {
+          // East
+          x: BoardX(6),
+          y: BoardY(5),
+        },
+        {
+          // West
+          x: BoardX(4),
+          y: BoardY(5),
+        },
+      ];
+      expect(
+        getMoveLocations({
+          plane: createTestPlane({ x: BoardX(5), y: BoardY(5) }),
+          dice: 1,
+          inFlightPlanes: [
+            // This plane is "north" of the starting plane,
+            // thus preventing our plane from trying to move there
+            createTestPlane({ x: BoardX(5), y: BoardY(4) }),
+          ],
+        })
+      ).toEqual({
+        boardLocations,
+        boardLocationStrs: boardLocations.map(getBoardLocationString),
+      });
+    });
+    test('returns 3 moves when at the edge of the map', () => {
+      const boardLocations: BoardLocation[] = [
+        {
+          x: BoardX(3),
+          y: BoardY(1),
+        },
+        {
+          x: BoardX(4),
+          y: BoardY(0),
+        },
+        {
+          x: BoardX(2),
+          y: BoardY(0),
+        },
+      ];
+      expect(
+        getMoveLocations({
+          // Plane cannot move north as its already north enough.
+          plane: createTestPlane({ x: BoardX(3), y: BoardY(0) }),
+          dice: 1,
+          inFlightPlanes: [
+            // This plane is elsewhere and not important.
+            createTestPlane({ x: BoardX(5), y: BoardY(5) }),
+          ],
+        })
+      ).toEqual({
+        boardLocations,
+        boardLocationStrs: boardLocations.map(getBoardLocationString),
+      });
+    });
   });
 
   describe('roll of 2', () => {
