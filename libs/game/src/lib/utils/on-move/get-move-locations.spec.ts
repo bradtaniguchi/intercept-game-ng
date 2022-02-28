@@ -1,5 +1,6 @@
 import {
   BoardLocation,
+  BoardLocationStr,
   BoardX,
   BoardY,
   createGrid,
@@ -7,7 +8,7 @@ import {
   isBoardLocationEq,
   updateGrid,
 } from '../../models/board';
-import { createTestPlane } from '../../models/plane/plane';
+import {} from '../../models/plane/plane';
 import { boardToStr } from '../board-to-str/board-to-str';
 import { getMoveLocations } from './get-move-locations';
 
@@ -38,7 +39,7 @@ describe('getMoveLocations', () => {
       ];
       expect(
         getMoveLocations({
-          plane: { ...createTestPlane(), x: BoardX(5), y: BoardY(5) },
+          plane: { x: BoardX(5), y: BoardY(5) },
           dice: 1,
           inFlightPlanes: [],
         })
@@ -67,12 +68,12 @@ describe('getMoveLocations', () => {
       ];
       expect(
         getMoveLocations({
-          plane: createTestPlane({ x: BoardX(5), y: BoardY(5) }),
+          plane: { x: BoardX(5), y: BoardY(5) },
           dice: 1,
           inFlightPlanes: [
             // This plane is "north" of the starting plane,
             // thus preventing our plane from trying to move there
-            createTestPlane({ x: BoardX(5), y: BoardY(4) }),
+            { x: BoardX(5), y: BoardY(4) },
           ],
         })
       ).toEqual({
@@ -98,11 +99,11 @@ describe('getMoveLocations', () => {
       expect(
         getMoveLocations({
           // Plane cannot move north as its already north enough.
-          plane: createTestPlane({ x: BoardX(3), y: BoardY(0) }),
+          plane: { x: BoardX(3), y: BoardY(0) },
           dice: 1,
           inFlightPlanes: [
             // This plane is elsewhere and not important.
-            createTestPlane({ x: BoardX(5), y: BoardY(5) }),
+            { x: BoardX(5), y: BoardY(5) },
           ],
         })
       ).toEqual({
@@ -157,7 +158,7 @@ describe('getMoveLocations', () => {
       expect(
         getMoveLocations({
           // Plane cannot move north as its already north enough.
-          plane: createTestPlane(startLocation),
+          plane: startLocation,
           dice: 2,
           inFlightPlanes: [],
         })
@@ -208,7 +209,103 @@ OOOOOOOOOO`);
       const noDupesSet = Array.from(new Set(boardLocationStrs).values());
       expect(noDupesSet.length).toEqual(boardLocationStrs.length);
     });
-    test.todo('returns 8 moves, when plane is adjacent');
+    test('returns 8 moves, when plane is adjacent', () => {
+      const boardLocations: BoardLocation[] = [
+        {
+          x: 5,
+          y: 3,
+        },
+        {
+          x: 5,
+          y: 5,
+        },
+        {
+          x: 6,
+          y: 4,
+        },
+        {
+          x: 4,
+          y: 4,
+        },
+        {
+          x: 6,
+          y: 6,
+        },
+        {
+          x: 7,
+          y: 5,
+        },
+        {
+          x: 4,
+          y: 6,
+        },
+        {
+          x: 3,
+          y: 5,
+        },
+      ] as BoardLocation[];
+      const boardLocationStrs = boardLocations.map(getBoardLocationString);
+      const startLocation = { x: BoardX(5), y: BoardY(5) };
+      // const
+      expect(
+        getMoveLocations({
+          // Plane cannot move north as its already north enough.
+          plane: startLocation,
+          dice: 2,
+          inFlightPlanes: [
+            // Below the plane
+            { x: BoardX(5), y: BoardY(6) },
+          ],
+        })
+      ).toEqual({
+        boardLocations,
+        boardLocationStrs,
+      });
+      // Visual check
+      expect(
+        boardToStr({
+          board: boardLocations.reduce(
+            (board, boardLocation) =>
+              updateGrid({
+                board,
+                location: boardLocation,
+                cell: isBoardLocationEq(boardLocation, startLocation)
+                  ? 'S'
+                  : 'X',
+              }),
+            updateGrid({
+              board: createGrid(() => 'O'),
+              location: startLocation,
+              cell: 'S',
+            })
+          ),
+          startWithNewLine: true,
+          cellToStr: (cell) => cell,
+        })
+      ).toEqual(`
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOXOOOO
+OOOOXOXOOO
+OOOXOSOXOO
+OOOOXOXOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO`);
+
+      // Has 8 possible moves
+      expect(boardLocationStrs.length).toBe(8);
+
+      // No duplicates
+      const noDupesSet = Array.from(new Set(boardLocationStrs).values());
+      expect(noDupesSet.length).toEqual(boardLocationStrs.length);
+
+      // Includes starting position
+      expect(boardLocationStrs.includes(BoardLocationStr('5-5'))).toEqual(true);
+    });
   });
 
   describe('roll of 3', () => {

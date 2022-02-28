@@ -32,7 +32,7 @@ export const getMoveLocations = ({
   /**
    * The list of planes currently in flight
    */
-  inFlightPlanes: Plane[];
+  inFlightPlanes: Array<Pick<Plane, 'x' | 'y'>>;
 }): {
   /**
    * The locations the plane can move.
@@ -93,10 +93,7 @@ export const getMoveLocations = ({
       for (let i = 0; i < boardLocations.length; i++) {
         const boardLocationStr = boardLocationStrs[i];
         const boardLocation = boardLocations[i];
-        if (acc.boardLocationStrs.includes(boardLocationStr)) {
-          // If the location is already included, then don't include it again
-          continue;
-        }
+        if (acc.boardLocationStrs.includes(boardLocationStr)) continue;
         acc.boardLocations.push(boardLocation);
         acc.boardLocationStrs.push(boardLocationStr);
       }

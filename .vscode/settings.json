@@ -43,6 +43,7 @@
     "treosh",
     "zhuangtongfa"
   ],
+  "cSpell.ignorePaths": ["*.spec.ts"],
   // force logging to be enabled
   "angular.log": "verbose",
   // allow eslint to use more memory to improve performance for
