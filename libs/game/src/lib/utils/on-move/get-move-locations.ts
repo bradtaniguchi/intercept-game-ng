@@ -16,7 +16,11 @@ import { Plane } from '../../models/plane/plane';
  * at the starting location.
  * 3. A plane cannot move through another plane.
  */
-export const getMoveLocations = (params: {
+export const getMoveLocations = ({
+  plane,
+  dice,
+  inFlightPlanes,
+}: {
   /**
    * The plane we are returning moves for.
    */
@@ -41,70 +45,66 @@ export const getMoveLocations = (params: {
    */
   boardLocationStrs: BoardLocationStr[];
 } => {
-  /**
-   *  Internal function used to recursively call with only
-   * the boardLocations return, rather than both boardLocationsStr
-   * and boardLocations.
-   */
-  const getMoveLocations = ({
-    plane,
-    dice,
-    inFlightPlanes,
-  }: {
-    plane: Plane;
-    dice: DiceSides;
-    inFlightPlanes: Plane[];
-  }): BoardLocation[] => {
-    const landingSpots: BoardLocation[] = [];
-    const nextDice = (dice - 1) as DiceSides;
-    const { north, south, east, west } = getNearLocationCoords(plane);
-    if (
-      north &&
-      !inFlightPlanes.find((inFlightPlane) =>
-        isBoardLocationEq(north, inFlightPlane)
-      )
+  const landingSpots: BoardLocation[] = [];
+  const nextDice = (dice - 1) as DiceSides;
+  const { north, south, east, west } = getNearLocationCoords(plane);
+  if (
+    north &&
+    !inFlightPlanes.find((inFlightPlane) =>
+      isBoardLocationEq(north, inFlightPlane)
     )
-      landingSpots.push(north);
-    if (
-      south &&
-      !inFlightPlanes.find((inFlightPlane) =>
-        isBoardLocationEq(south, inFlightPlane)
-      )
+  )
+    landingSpots.push(north);
+  if (
+    south &&
+    !inFlightPlanes.find((inFlightPlane) =>
+      isBoardLocationEq(south, inFlightPlane)
     )
-      landingSpots.push(south);
-    if (
-      east &&
-      !inFlightPlanes.find((inFlightPlane) =>
-        isBoardLocationEq(east, inFlightPlane)
-      )
+  )
+    landingSpots.push(south);
+  if (
+    east &&
+    !inFlightPlanes.find((inFlightPlane) =>
+      isBoardLocationEq(east, inFlightPlane)
     )
-      landingSpots.push(east);
-    if (
-      west &&
-      !inFlightPlanes.find((inFlightPlane) =>
-        isBoardLocationEq(west, inFlightPlane)
-      )
+  )
+    landingSpots.push(east);
+  if (
+    west &&
+    !inFlightPlanes.find((inFlightPlane) =>
+      isBoardLocationEq(west, inFlightPlane)
     )
-      landingSpots.push(west);
-    if (nextDice <= 0) return landingSpots;
+  )
+    landingSpots.push(west);
+  if (nextDice <= 0)
+    return {
+      boardLocations: landingSpots,
+      boardLocationStrs: landingSpots.map(getBoardLocationString),
+    };
 
-    return landingSpots.reduce(
-      (acc, { x, y }) => [
-        ...acc,
-        ...getMoveLocations({
-          plane: { ...plane, x, y },
-          dice: nextDice,
-          inFlightPlanes,
-        }),
-      ],
-      [] as BoardLocation[]
-    );
-  };
+  return landingSpots.reduce(
+    (acc, { x, y }) => {
+      const { boardLocations, boardLocationStrs } = getMoveLocations({
+        plane: { ...plane, x, y },
+        dice: nextDice,
+        inFlightPlanes,
+      });
+      for (let i = 0; i < boardLocations.length; i++) {
+        const boardLocationStr = boardLocationStrs[i];
+        const boardLocation = boardLocations[i];
+        if (acc.boardLocationStrs.includes(boardLocationStr)) {
+          // If the location is already included, then don't include it again
+          return acc;
+        }
+        acc.boardLocations.push(boardLocation);
+        acc.boardLocationStrs.push(boardLocationStr);
+      }
 
-  const boardLocations = getMoveLocations(params);
-
-  return {
-    boardLocations,
-    boardLocationStrs: boardLocations.map(getBoardLocationString),
-  };
+      return acc;
+    },
+    { boardLocations: [], boardLocationStrs: [] } as {
+      boardLocations: BoardLocation[];
+      boardLocationStrs: BoardLocationStr[];
+    }
+  );
 };

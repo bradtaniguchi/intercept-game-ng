@@ -2,9 +2,13 @@ import {
   BoardLocation,
   BoardX,
   BoardY,
+  createGrid,
   getBoardLocationString,
+  isBoardLocationEq,
+  updateGrid,
 } from '../../models/board';
 import { createTestPlane } from '../../models/plane/plane';
+import { boardToStr } from '../board-to-str/board-to-str';
 import { getMoveLocations } from './get-move-locations';
 
 describe('getMoveLocations', () => {
@@ -109,7 +113,64 @@ describe('getMoveLocations', () => {
   });
 
   describe('roll of 2', () => {
-    test.todo('returns 9 moves (can go back to start square)');
+    test.only('returns 9 moves (can go back to start square)', () => {
+      const boardLocations: BoardLocation[] = [] as BoardLocation[];
+      const boardLocationStrs = boardLocations.map(getBoardLocationString);
+      const startLocation = { x: BoardX(5), y: BoardY(5) };
+      expect(
+        getMoveLocations({
+          // Plane cannot move north as its already north enough.
+          plane: createTestPlane(startLocation),
+          dice: 2,
+          inFlightPlanes: [],
+        })
+      ).toEqual({
+        boardLocations,
+        boardLocationStrs,
+      });
+
+      // Visual check
+      expect(
+        boardToStr({
+          board: boardLocations.reduce(
+            (board, boardLocation) =>
+              updateGrid({
+                board,
+                location: boardLocation,
+                cell: isBoardLocationEq(boardLocation, startLocation)
+                  ? 'S'
+                  : 'X',
+              }),
+            updateGrid({
+              board: createGrid(() => 'O'),
+              location: startLocation,
+              cell: 'S',
+            })
+          ),
+          startWithNewLine: true,
+          cellToStr: (cell) => cell,
+        })
+      ).toEqual(`
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOXOOOO
+OOOOXOXOOO
+OOOXOSOXOO
+OOOOXOXOOO
+OOOOOXOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO`);
+
+      // Has 9 possible moves
+      expect(boardLocationStrs.length).toBe(9);
+
+      // No duplicates
+      const noDupesSet = Array.from(new Set(boardLocationStrs).values());
+      expect(noDupesSet.length).toEqual(boardLocationStrs.length);
+    });
     test.todo('returns 8 moves, when plane is adjacent');
   });
 
