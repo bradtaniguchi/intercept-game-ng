@@ -24,7 +24,7 @@ export const getMoveLocations = ({
   /**
    * The plane we are returning moves for.
    */
-  plane: Plane;
+  plane: Pick<Plane, 'x' | 'y'>;
   /**
    * The roll we are calculating moves for.
    */
@@ -76,6 +76,7 @@ export const getMoveLocations = ({
     )
   )
     landingSpots.push(west);
+
   if (nextDice <= 0)
     return {
       boardLocations: landingSpots,
@@ -85,7 +86,7 @@ export const getMoveLocations = ({
   return landingSpots.reduce(
     (acc, { x, y }) => {
       const { boardLocations, boardLocationStrs } = getMoveLocations({
-        plane: { ...plane, x, y },
+        plane: { x, y },
         dice: nextDice,
         inFlightPlanes,
       });
@@ -94,7 +95,7 @@ export const getMoveLocations = ({
         const boardLocation = boardLocations[i];
         if (acc.boardLocationStrs.includes(boardLocationStr)) {
           // If the location is already included, then don't include it again
-          return acc;
+          continue;
         }
         acc.boardLocations.push(boardLocation);
         acc.boardLocationStrs.push(boardLocationStr);

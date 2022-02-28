@@ -113,8 +113,45 @@ describe('getMoveLocations', () => {
   });
 
   describe('roll of 2', () => {
-    test.only('returns 9 moves (can go back to start square)', () => {
-      const boardLocations: BoardLocation[] = [] as BoardLocation[];
+    test('returns 9 moves (can go back to start square)', () => {
+      const boardLocations: BoardLocation[] = [
+        {
+          x: 5,
+          y: 3,
+        },
+        {
+          x: 5,
+          y: 5,
+        },
+        {
+          x: 6,
+          y: 4,
+        },
+        {
+          x: 4,
+          y: 4,
+        },
+        {
+          x: 5,
+          y: 7,
+        },
+        {
+          x: 6,
+          y: 6,
+        },
+        {
+          x: 4,
+          y: 6,
+        },
+        {
+          x: 7,
+          y: 5,
+        },
+        {
+          x: 3,
+          y: 5,
+        },
+      ] as BoardLocation[];
       const boardLocationStrs = boardLocations.map(getBoardLocationString);
       const startLocation = { x: BoardX(5), y: BoardY(5) };
       expect(
