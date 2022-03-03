@@ -306,25 +306,31 @@ OOOOOOOOOO`);
       // Includes starting position
       expect(boardLocationStrs.includes(BoardLocationStr('5-5'))).toEqual(true);
     });
+
+    test.todo('returns moves no including the side');
   });
 
   describe('roll of 3', () => {
     test.todo('returns 16 moves');
     test.todo('returns ?? moves, when plane is adjacent');
+    test.todo('returns less moves, when plane is on the side of the board');
   });
 
   describe('roll of 4', () => {
     test.todo('returns 25 moves (can go back to the start square)');
     test.todo('returns ?? moves, when plane is adjacent');
+    test.todo('returns less moves, when plane is on the side of the board');
   });
 
   describe('roll of 5', () => {
     test.todo('returns 36 moves');
     test.todo('returns ?? moves, when plane is adjacent');
+    test.todo('returns less moves, when plane is on the side of the board');
   });
 
   describe('roll of 6', () => {
     test.todo('returns 49 moves (can go back to the start square)');
     test.todo('returns ?? moves, when plane is adjacent');
+    test.todo('returns less moves, when plane is on the side of the board');
   });
 });
