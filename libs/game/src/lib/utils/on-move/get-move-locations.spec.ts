@@ -334,30 +334,120 @@ OOOOOOOOOO`,
       expect(boardLocationStrs.includes(BoardLocationStr('5-5'))).toEqual(true);
     });
 
-    test.todo('returns moves no including the side');
+    test('returns moves no including the side', () =>
+      visualCheck({
+        dice: 2,
+        // Starts at the middle bottom
+        startLocation: { x: BoardX(5), y: BoardY(11) },
+        expected: `
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOXOOOO
+OOOOXOXOOO
+OOOXOSOXOO`,
+      }));
   });
 
   describe('roll of 3', () => {
-    test.todo('returns 16 moves');
-    test.todo('returns ?? moves, when plane is adjacent');
-    test.todo('returns less moves, when plane is on the side of the board');
-  });
-
-  describe('roll of 4', () => {
-    test.todo('returns 25 moves (can go back to the start square)');
-    test.todo('returns ?? moves, when plane is adjacent');
-    test.todo('returns less moves, when plane is on the side of the board');
-  });
-
-  describe('roll of 5', () => {
-    test.todo('returns 36 moves');
-    test.todo('returns ?? moves, when plane is adjacent');
-    test.todo('returns less moves, when plane is on the side of the board');
+    test('returns 16 moves', () =>
+      visualCheck({
+        dice: 3,
+        startLocation: { x: BoardX(5), y: BoardY(5) },
+        expected: `
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOXOOOO
+OOOOXOXOOO
+OOOXOXOXOO
+OOXOXSXOXO
+OOOXOXOXOO
+OOOOXOXOOO
+OOOOOXOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO`,
+      }));
+    test('returns moves, when plane is adjacent', () =>
+      visualCheck({
+        dice: 3,
+        // Start closer to the corner
+        startLocation: { x: BoardX(2), y: BoardY(2) },
+        inFlightPlanes: [
+          {
+            // Directly west
+            x: BoardX(1),
+            y: BoardY(2),
+          },
+          {
+            // South to the east
+            x: BoardX(3),
+            y: BoardY(3),
+          },
+          {
+            // South 2
+            x: BoardX(2),
+            y: BoardY(4),
+          },
+        ],
+        expected: `
+OXOXOOOOOO
+XOXOXOOOOO
+OOSXOXOOOO
+XOXOXOOOOO
+OXOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO
+OOOOOOOOOO`,
+      }));
   });
 
   describe('roll of 6', () => {
-    test.todo('returns 49 moves (can go back to the start square)');
-    test.todo('returns ?? moves, when plane is adjacent');
-    test.todo('returns less moves, when plane is on the side of the board');
+    test('returns 49 moves (can go back to the start square)', () =>
+      visualCheck({
+        dice: 6,
+        // Start closer to the corner
+        startLocation: { x: BoardX(3), y: BoardY(4) },
+        inFlightPlanes: [
+          {
+            // West and North
+            x: BoardX(1),
+            y: BoardY(2),
+          },
+          {
+            // Directly North
+            x: BoardX(3),
+            y: BoardY(3),
+          },
+          {
+            // Far
+            x: BoardX(8),
+            y: BoardY(8),
+          },
+        ],
+        expected: `
+OXOXOXOOOO
+XOXOXOXOOO
+OOOXOXOXOO
+XOXOXOXOXO
+OXOSOXOXOX
+XOXOXOXOXO
+OXOXOXOXOO
+XOXOXOXOOO
+OXOXOXOOOO
+OOXOXOOOOO
+OOOXOOOOOO
+OOOOOOOOOO`,
+      }));
   });
 });
