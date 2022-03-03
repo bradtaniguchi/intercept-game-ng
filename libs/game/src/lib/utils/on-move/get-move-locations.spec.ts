@@ -1,4 +1,5 @@
 import {
+  BoardGrid,
   BoardLocation,
   BoardLocationStr,
   BoardX,
@@ -8,11 +9,67 @@ import {
   isBoardLocationEq,
   updateGrid,
 } from '../../models/board';
-import {} from '../../models/plane/plane';
+import { DiceSides } from '../../models/game-session/dice-sides';
+import { Plane } from '../../models/plane/plane';
 import { boardToStr } from '../board-to-str/board-to-str';
 import { getMoveLocations } from './get-move-locations';
 
 describe('getMoveLocations', () => {
+  /**
+   * Runs a "visual-check" to verify the given locations
+   * create the corresponding expected board-locations.
+   *
+   * Should be used for the more complex checks
+   */
+  const visualCheck = ({
+    expected,
+    dice,
+    inFlightPlanes,
+    startLocation,
+  }: {
+    /**
+     * The location the plane starts at,
+     * represented by an `S`
+     */
+    startLocation: BoardLocation;
+    /**
+     * The dice sides
+     */
+    dice: DiceSides;
+    /**
+     * Possibly inflight planes, defaults to empty array
+     */
+    inFlightPlanes?: Array<Pick<Plane, 'x' | 'y'>>;
+    /**
+     * The board string we are to expect from the location.
+     * All locations start as `O`
+     */
+    expected: string;
+  }) =>
+    expect(
+      boardToStr({
+        board: getMoveLocations({
+          plane: startLocation,
+          dice,
+          inFlightPlanes: inFlightPlanes || [],
+        }).boardLocations.reduce(
+          (board, boardLocation) =>
+            updateGrid({
+              board,
+              location: boardLocation,
+              cell: isBoardLocationEq(boardLocation, startLocation) ? 'S' : 'X',
+            }),
+          updateGrid({
+            board: createGrid(() => 'O'),
+            location: startLocation,
+            cell: 'S',
+          })
+        ),
+        startWithNewLine: true,
+        cellToStr: (cell) => cell,
+      })
+    ).toEqual(expected);
+
   describe('roll of 1', () => {
     test('returns 4 moves', () => {
       const boardLocations: BoardLocation[] = [
@@ -167,28 +224,10 @@ describe('getMoveLocations', () => {
         boardLocationStrs,
       });
 
-      // Visual check
-      expect(
-        boardToStr({
-          board: boardLocations.reduce(
-            (board, boardLocation) =>
-              updateGrid({
-                board,
-                location: boardLocation,
-                cell: isBoardLocationEq(boardLocation, startLocation)
-                  ? 'S'
-                  : 'X',
-              }),
-            updateGrid({
-              board: createGrid(() => 'O'),
-              location: startLocation,
-              cell: 'S',
-            })
-          ),
-          startWithNewLine: true,
-          cellToStr: (cell) => cell,
-        })
-      ).toEqual(`
+      visualCheck({
+        dice: 2,
+        startLocation,
+        expected: `
 OOOOOOOOOO
 OOOOOOOOOO
 OOOOOOOOOO
@@ -200,7 +239,8 @@ OOOOOXOOOO
 OOOOOOOOOO
 OOOOOOOOOO
 OOOOOOOOOO
-OOOOOOOOOO`);
+OOOOOOOOOO`,
+      });
 
       // Has 9 possible moves
       expect(boardLocationStrs.length).toBe(9);
@@ -261,28 +301,15 @@ OOOOOOOOOO`);
         boardLocations,
         boardLocationStrs,
       });
-      // Visual check
-      expect(
-        boardToStr({
-          board: boardLocations.reduce(
-            (board, boardLocation) =>
-              updateGrid({
-                board,
-                location: boardLocation,
-                cell: isBoardLocationEq(boardLocation, startLocation)
-                  ? 'S'
-                  : 'X',
-              }),
-            updateGrid({
-              board: createGrid(() => 'O'),
-              location: startLocation,
-              cell: 'S',
-            })
-          ),
-          startWithNewLine: true,
-          cellToStr: (cell) => cell,
-        })
-      ).toEqual(`
+
+      visualCheck({
+        dice: 2,
+        startLocation,
+        inFlightPlanes: [
+          // Below the plane
+          { x: BoardX(5), y: BoardY(6) },
+        ],
+        expected: `
 OOOOOOOOOO
 OOOOOOOOOO
 OOOOOOOOOO
@@ -294,8 +321,8 @@ OOOOOOOOOO
 OOOOOOOOOO
 OOOOOOOOOO
 OOOOOOOOOO
-OOOOOOOOOO`);
-
+OOOOOOOOOO`,
+      });
       // Has 8 possible moves
       expect(boardLocationStrs.length).toBe(8);
 
