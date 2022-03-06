@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectionStrategy, Component, NgModule
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+// import {} from '@intercept-game/game/';
 
 @Component({
   selector: 'intercept-game-game-board',
@@ -10,6 +9,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameBoardComponent {
+  // public readonly board:
 }
 
 @NgModule({
