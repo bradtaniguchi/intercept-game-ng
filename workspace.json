@@ -8,6 +8,7 @@
     "game": "libs/game",
     "game-client-ng": "apps/game-client-ng",
     "game-client-ng-e2e": "apps/game-client-ng-e2e",
+    "game-ui": "libs/game-ui",
     "gh-codespaces": "libs/gh-codespaces",
     "internal-ng": "apps/internal-ng",
     "internal-ng-e2e": "apps/internal-ng-e2e",

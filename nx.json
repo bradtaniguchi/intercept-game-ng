@@ -48,7 +48,6 @@
     "@nrwl/angular:library": {
       "linter": "eslint",
       "unitTestRunner": "jest",
-      "style": "scss",
       "strict": true,
       "standaloneConfig": true,
       "tags": "type:lib"

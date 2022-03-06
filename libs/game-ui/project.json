@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/game-ui",
+  "sourceRoot": "libs/game-ui/src",
+  "prefix": "intercept-game",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/game-ui"],
+      "options": {
+        "jestConfig": "libs/game-ui/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/game-ui/src/**/*.ts",
+          "libs/game-ui/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["type:lib"]
+}

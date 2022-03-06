@@ -21,6 +21,7 @@
       "@intercept-game/common-ng": ["libs/common-ng/src/index.ts"],
       "@intercept-game/common-ngrx": ["libs/common-ngrx/src/index.ts"],
       "@intercept-game/game": ["libs/game/src/index.ts"],
+      "@intercept-game/game-ui": ["libs/game-ui/src/index.ts"],
       "@intercept-game/gh-codespaces": ["libs/gh-codespaces/src/index.ts"],
       "@intercept-game/script-loader": ["libs/script-loader/src/index.ts"]
     }
