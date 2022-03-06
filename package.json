@@ -79,6 +79,7 @@
     "@storybook/addon-essentials": "~6.4.5",
     "@storybook/angular": "~6.4.5",
     "@storybook/builder-webpack5": "~6.4.5",
+    "@storybook/core": "^6.4.19",
     "@storybook/manager-webpack5": "~6.4.5",
     "@types/jest": "27.0.2",
     "@types/node": "14.14.33",
