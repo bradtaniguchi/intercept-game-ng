@@ -1,6 +1,8 @@
 import { Directive, Input, ViewContainerRef } from '@angular/core';
 import { BoardLocation } from '@intercept-game/game';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[gameCell]',
