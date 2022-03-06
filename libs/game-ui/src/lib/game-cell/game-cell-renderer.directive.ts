@@ -1,6 +1,7 @@
 import { Directive, Input, ViewContainerRef } from '@angular/core';
 import { BoardLocation } from '@intercept-game/game';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { GameCellGridComponent } from '../game-cell-grid/game-cell-grid.component';
 
 @UntilDestroy()
 @Directive({
@@ -15,9 +16,8 @@ export class GameCellRendererDirective {
   @Input() gameCell?: BoardLocation;
 
   constructor(public viewContainerRef: ViewContainerRef) {
-    console.log('test', this.gameCell);
-    // TODO: generate components dynamically related to whats "on" the grid
-    // this.viewContainerRef.clear();
-    // this.viewContainerRef.createComponent();
+    // TODO: as a test
+    this.viewContainerRef.clear();
+    this.viewContainerRef.createComponent(GameCellGridComponent);
   }
 }

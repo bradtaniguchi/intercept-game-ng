@@ -11,7 +11,17 @@ import { GameCellRendererDirective } from './game-cell-renderer.directive';
 @Component({
   selector: 'intercept-game-game-cell',
   templateUrl: './game-cell.component.html',
-  styles: [],
+  styles: [
+    `
+      .cell {
+        min-width: 64px;
+        min-height: 64px;
+        height: 64px;
+        width: 64px;
+        border: 1px solid grey;
+      }
+    `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameCellComponent {
