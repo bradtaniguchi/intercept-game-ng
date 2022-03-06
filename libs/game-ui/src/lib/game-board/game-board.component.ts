@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
-// import {} from '@intercept-game/game/';
+import { createGrid } from '@intercept-game/game';
+import { GameCellComponentModule } from '../game-cell/game-cell.component';
+import { ExponentialStrengthPipe } from './game-board-location.pipe';
 
 @Component({
   selector: 'intercept-game-game-board',
@@ -9,12 +11,17 @@ import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameBoardComponent {
-  // public readonly board:
+  /**
+   * The grid used to render all the nested components. This
+   * is primarily to provide the coordinates for display and
+   * each of the nested components renders stuff individually.
+   */
+  public readonly grid = createGrid();
 }
 
 @NgModule({
-  imports: [CommonModule],
-  declarations: [GameBoardComponent],
+  imports: [CommonModule, GameCellComponentModule],
+  declarations: [GameBoardComponent, ExponentialStrengthPipe],
   exports: [GameBoardComponent],
 })
 export class GameBoardComponentModule {}
