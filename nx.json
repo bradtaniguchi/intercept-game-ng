@@ -37,6 +37,12 @@
     "defaultCollection": "@nrwl/angular"
   },
   "generators": {
+    "@nrwl/angular:scam": {
+      "style": "scss",
+      "skipTests": true,
+      "inlineStyle": true,
+      "changeDetection": "OnPush"
+    },
     "@nrwl/angular:application": {
       "style": "scss",
       "linter": "eslint",
