@@ -6,6 +6,7 @@ import {
   NgModule,
 } from '@angular/core';
 import { BoardLocation } from '@intercept-game/game';
+import { GameCellRendererDirective } from './game-cell-renderer.directive';
 
 @Component({
   selector: 'intercept-game-game-cell',
@@ -19,7 +20,7 @@ export class GameCellComponent {
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [GameCellComponent],
+  declarations: [GameCellComponent, GameCellRendererDirective],
   exports: [GameCellComponent],
 })
 export class GameCellComponentModule {}

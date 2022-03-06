@@ -1,5 +1,6 @@
 import { BoardX, BoardY } from '@intercept-game/game';
 import { moduleMetadata, Story, Meta } from '@storybook/angular';
+import { GameCellRendererDirective } from './game-cell-renderer.directive';
 import { GameCellComponent } from './game-cell.component';
 
 export default {
@@ -8,6 +9,7 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [],
+      declarations: [GameCellRendererDirective],
     }),
   ],
 } as Meta<GameCellComponent>;
