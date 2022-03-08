@@ -1,3 +1,5 @@
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { DIRECTIONS } from '@intercept-game/game';
 import { Meta, moduleMetadata, Story } from '@storybook/angular';
 import { GameCellComponent } from './game-cell.component';
 
@@ -6,10 +8,25 @@ export default {
   component: GameCellComponent,
   decorators: [
     moduleMetadata({
-      imports: [],
+      imports: [FontAwesomeModule],
       declarations: [],
     }),
   ],
+  argTypes: {
+    direction: {
+      options: DIRECTIONS,
+      type: 'string',
+      defaultValue: 'north',
+      description:
+        'The direction the icon should be facing, only applies to jet-fighter',
+    },
+    icon: {
+      options: ['jet-fighter', 'bomb'],
+      type: 'string',
+      defaultValue: 'jet-fighter',
+      description: 'The type of icon to display',
+    },
+  },
 } as Meta<GameCellComponent>;
 
 const Template: Story<GameCellComponent> = (args: GameCellComponent) => ({

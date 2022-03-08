@@ -1,13 +1,12 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   Input,
   NgModule,
 } from '@angular/core';
-import { Direction } from '@intercept-game/game';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faFighterJet, faBomb } from '@fortawesome/free-solid-svg-icons';
+import { faBomb, faFighterJet } from '@fortawesome/free-solid-svg-icons';
+import { Direction } from '@intercept-game/game';
 
 @Component({
   selector: 'intercept-game-game-cell',
@@ -20,6 +19,9 @@ import { faFighterJet, faBomb } from '@fortawesome/free-solid-svg-icons';
         height: 64px;
         width: 64px;
         border: 1px solid grey;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     `,
   ],
@@ -49,10 +51,34 @@ export class GameCellComponent {
 
     return undefined;
   }
+
+  /**
+   * The rotation of the icon.
+   * Only supports the `jet-fighter` icon, as the bomb
+   * has the same orient
+   */
+  public get faRotation() {
+    if (this.icon === 'jet-fighter') {
+      switch (this.direction) {
+        case 'north':
+          return 270;
+        case 'south':
+          return 90;
+        case 'east':
+          return 0;
+        case 'west':
+          return 180;
+        default:
+          return undefined;
+      }
+    }
+
+    return undefined;
+  }
 }
 
 @NgModule({
-  imports: [CommonModule, FontAwesomeModule],
+  imports: [FontAwesomeModule],
   declarations: [GameCellComponent],
   exports: [GameCellComponent],
 })
