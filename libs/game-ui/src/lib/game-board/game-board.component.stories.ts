@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Meta, moduleMetadata, Story } from '@storybook/angular';
 import { GameCellComponentModule } from '../game-cell/game-cell.component';
-import { GameBoardLocationPipe } from './game-board-location.pipe';
 import { GameBoardComponent } from './game-board.component';
 
 export default {
@@ -10,7 +9,7 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [CommonModule, GameCellComponentModule],
-      declarations: [GameBoardLocationPipe],
+      declarations: [],
     }),
   ],
 } as Meta<GameBoardComponent>;

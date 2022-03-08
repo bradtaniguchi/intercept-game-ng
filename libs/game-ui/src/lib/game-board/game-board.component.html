@@ -2,10 +2,7 @@
        style="border-spacing: 0; border-color: grey">
   <tr *ngFor="let row of grid; let y = index">
     <td *ngFor="let column of row; let x = index">
-      <intercept-game-game-cell [location]="{
-        x: x,
-        y: y
-      } | location">
+      <intercept-game-game-cell>
       </intercept-game-game-cell>
     </td>
   </tr>

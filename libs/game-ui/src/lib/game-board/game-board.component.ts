@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { createGrid } from '@intercept-game/game';
 import { GameCellComponentModule } from '../game-cell/game-cell.component';
-import { GameBoardLocationPipe } from './game-board-location.pipe';
 
 @Component({
   selector: 'intercept-game-game-board',
@@ -21,7 +20,7 @@ export class GameBoardComponent {
 
 @NgModule({
   imports: [CommonModule, GameCellComponentModule],
-  declarations: [GameBoardComponent, GameBoardLocationPipe],
+  declarations: [GameBoardComponent],
   exports: [GameBoardComponent],
 })
 export class GameBoardComponentModule {}

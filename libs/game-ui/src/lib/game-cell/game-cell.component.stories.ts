@@ -1,6 +1,4 @@
-import { BoardX, BoardY } from '@intercept-game/game';
-import { moduleMetadata, Story, Meta } from '@storybook/angular';
-import { GameCellRendererDirective } from './game-cell-renderer.directive';
+import { Meta, moduleMetadata, Story } from '@storybook/angular';
 import { GameCellComponent } from './game-cell.component';
 
 export default {
@@ -9,7 +7,7 @@ export default {
   decorators: [
     moduleMetadata({
       imports: [],
-      declarations: [GameCellRendererDirective],
+      declarations: [],
     }),
   ],
 } as Meta<GameCellComponent>;
@@ -20,9 +18,4 @@ const Template: Story<GameCellComponent> = (args: GameCellComponent) => ({
 });
 
 export const Primary = Template.bind({});
-Primary.args = {
-  location: {
-    x: BoardX(5),
-    y: BoardY(5),
-  },
-};
+Primary.args = {};
