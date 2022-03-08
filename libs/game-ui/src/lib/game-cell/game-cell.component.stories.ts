@@ -17,5 +17,9 @@ const Template: Story<GameCellComponent> = (args: GameCellComponent) => ({
   props: args,
 });
 
-export const Primary = Template.bind({});
-Primary.args = {};
+export const Plane = Template.bind({});
+Plane.args = {
+  icon: 'fa-fighter',
+  backgroundColor: 'grey',
+  direction: 'north',
+};

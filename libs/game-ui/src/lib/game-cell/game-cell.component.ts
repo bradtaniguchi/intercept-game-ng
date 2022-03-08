@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  NgModule,
+} from '@angular/core';
+import { Direction } from '@intercept-game/game';
 
 @Component({
   selector: 'intercept-game-game-cell',
@@ -17,7 +23,23 @@ import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GameCellComponent {}
+export class GameCellComponent {
+  /**
+   * The icon to display,
+   * currently only a bomb, or jet-fighter
+   * TODO: change to type
+   */
+  @Input() icon?: string;
+  /**
+   * The background-color of this cell.
+   * TODO: change to type
+   */
+  @Input() backgroundColor?: string;
+  /**
+   * The direction the icon should be facing
+   */
+  @Input() direction?: Direction;
+}
 
 @NgModule({
   imports: [CommonModule],
